@@ -1,0 +1,186 @@
+{% schema %}
+{
+  "name": "Banner Section",
+  "tag": "section",
+  "class": "banner-section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Banner Section"
+    }
+  ]
+}
+{% endschema %}
+<style>
+    .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        background: #F5F5F5;
+    }
+
+    .brand-name {
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-right: auto; 
+    }
+
+    .top-text {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap; 
+        color: #333;
+        font-size: 14px;
+    }
+
+    .choose-gift-btn {
+        display: inline-block;
+        background: #FFD900; 
+        color: #000;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-weight: bold;
+        border: none;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .choose-gift-btn:hover {
+        background: #000; 
+        color: #FFF; 
+    }
+    .hero {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background: white;
+        text-align: center;
+    }
+
+    .hero-bg {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .hero-content {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 50px 0;
+    }
+
+    .hero-text {
+        width: 50%;
+        color: black;
+        font-family: "Jost", sans-serif;
+    }
+
+    .hero-text h1 {
+        font-size: 4rem;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+    }
+
+    .shop-now-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background: black;
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease-in-out;
+}
+
+.shop-now-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: yellow;
+    transition: left 0.3s ease-in-out;
+    z-index: 0;
+}
+
+.shop-now-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.shop-now-btn:hover {
+    color: black;
+}
+
+.shop-now-btn:hover::before {
+    left: 0;
+}
+
+    .hero-image {
+        width: 50%;
+        height: auto;
+    }
+
+    .sustainable-banner {
+        width: 100%;
+        background: #F5F5F5;
+        padding: 15px 0;
+        text-align: center;
+    }
+
+    .banner-text {
+        font-size: 16px;
+        font-family: "Jost", sans-serif;
+        font-weight: 400;
+        color: black;
+        text-transform: uppercase;
+    }
+</style>
+
+    <header>
+    <nav class="nav">
+        <span class="brand-name">TISSO VISION</span>
+        <span class="top-text">Find the ideal gift for your loved ones.</span>
+        <a href="#" class="choose-gift-btn">
+            <span>CHOOSE GIFT →</span>
+        </a>
+    </nav>
+</header>
+<section class="hero">
+    <img class="hero-bg" src="{{ 'bg-1.png' | asset_url }}" alt="Background Image">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>The Gift Guide</h1>
+            <p>
+                Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated 
+                selection and find the perfect gifts to delight your loved ones this holiday season.
+            </p>
+            <a href="#" class="shop-now-btn"><span>Shop Now  →</span></a>
+        </div>
+        <img class="hero-image" src="{{ 'bg-2.png' | asset_url }}" alt="Right Image">
+    </div>
+</section>
+
+<section class="sustainable-banner">
+    <div class="banner-text">
+        SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL
+    </div>
+</section>
