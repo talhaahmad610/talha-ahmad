@@ -1,0 +1,279 @@
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin:30px auto auto;
+    padding:10px;
+    
+
+  }
+
+  .tagline{
+    padding:20px;
+  }
+
+  .product-item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-image {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+  .plus-sign {
+    position: absolute;
+    top: 60%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+
+  /* Popup Card */
+  .popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-card {
+    width: 311px;
+    height: 447px;
+    background: white;
+    position: relative;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.popup-image {
+    width: 120px;
+    height: 140px;
+}
+
+.popup-title, .popup-price, .popup-description {
+    font-family: Jost, sans-serif;
+}
+
+.popup-options {
+    margin-top: 10px;
+}
+
+.popup-colors, .popup-size {
+    display: flex;
+    gap: 10px;
+}
+
+.popup-add-to-cart {
+    background: black;
+    color: white;
+    padding: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+</style>
+
+
+
+<div class="tagline">
+<h2>Tisso Vision In the Wild</h2>
+</div>
+<div class="product-grid">
+  {% for product in collections.all.products limit:6 %}
+    <div class="product-item" data-handle="{{ product.handle }}">
+      <img src="{{ product.featured_image | img_url: 'medium' }}" class="product-image" alt="{{ product.title }}">
+      <div class="plus-sign" onclick="openPopup('{{ product.handle }}')">+</div>
+    </div>
+  {% endfor %}
+</div>
+<!-- Popup Card -->
+<div id="product-popup" style="display: none; width: 311px; height: 447px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); z-index: 1000; padding: 20px; border-radius: 8px;">
+    
+    <!-- Product Image -->
+    <img id="popup-product-image" style="width: 120px; height: 140px; left: 17px; top: 36px; position: absolute; object-fit: cover;">
+
+    <!-- Product Title -->
+    <div id="popup-title" style="width: 136px; left: 145px; top: 39px; position: absolute; color: black; font-size: 16px; font-family: Jost; font-weight: 300; line-height: 19.20px;"></div>
+
+    <!-- Product Price -->
+    <div id="popup-price" style="width: 64px; left: 145px; top: 60px; position: absolute; color: black; font-size: 16px; font-family: Lustria; font-weight: 400; line-height: 19.20px;"></div>
+
+    <!-- Product Description -->
+    <div id="popup-description" style="width: 146px; left: 145px; top: 80px; position: absolute; color: black; font-size: 14px; font-family: Jost; font-weight: 300; line-height: 15.40px;"></div>
+
+    <!-- Colors Section Container -->
+    <div id="popup-colors-container" style="width: 271px; height: 64.48px; left: 20px; top: 186px; position: absolute;"></div>
+
+    <!-- Sizes Section Container -->
+    <div id="popup-sizes-container" style="width: 271px; height: 64px; left: 20px; top: 262px; position: absolute;"></div>
+
+    <!-- Add to Cart Button -->
+    <div style="width: 271px; height: 45px; left: 20px; top: 377px; position: absolute; background: black; display: flex; align-items: center; justify-content: center;">
+        <div style="color: white; font-size: 16px; font-family: Jost; font-weight: 400; text-transform: uppercase; line-height: 20.48px;">
+            Add to cart
+        </div>
+    </div>
+
+    <!-- Close Button -->
+<div 
+  onclick="closePopup()" 
+  style="
+    position: absolute; 
+    top: 22.60px; 
+    right: 20px; 
+    width: 20px; 
+    height: 20px; 
+    cursor: pointer;
+    color: black;
+    font-size: 24px;
+    font-family: Jost;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+  "
+>×</div>
+
+</div>
+<script>
+async function openPopup(handle) {
+    try {
+        const response = await fetch(`/products/${handle}.json`);
+        if (!response.ok) throw new Error("Failed to fetch product");
+        const data = await response.json();
+        const product = data.product;
+
+        // Update basic info
+        document.getElementById('popup-title').textContent = product.title;
+        document.getElementById('popup-price').textContent = `${product.variants[0].price}€`;
+        document.getElementById('popup-description').textContent = product.body_html.replace(/<[^>]+>/g, '');
+        document.getElementById('popup-product-image').src = product.images[0]?.src || "https://placehold.co/120x140";
+
+        // ====== Dynamic Color Section ======
+        const colorsContainer = document.getElementById('popup-colors-container');
+        colorsContainer.innerHTML = `
+            <div data-property-1="Group 1000008186" style="width: 271px; height: 64.48px; position: absolute">
+                <div style="width: 271px; height: 40.44px; left: 0px; top: 24.04px; position: absolute; border: 0.50px black solid"></div>
+                <div style="left: 0px; top: 0px; position: absolute; color: #333333; font-size: 14px; font-family: Jost; font-weight: 400; line-height: 18.20px;">Color</div>
+            </div>
+        `;
+
+        const colorGroup = colorsContainer.firstElementChild;
+        const colors = product.options.find(opt => opt.name.toLowerCase() === 'color')?.values || [];
+
+        colors.forEach((color, index) => {
+            // Color Swatch
+            const swatch = document.createElement('div');
+            swatch.style.cssText = `
+                width: ${index === 0 ? '5.81px' : '4.84px'};
+                height: ${index === 0 ? '40.44px' : '39.63px'};
+                left: ${index === 0 ? '0px' : '135.50px'};
+                top: ${index === 0 ? '24.01px' : '24.41px'};
+                position: absolute;
+                background: ${color.toLowerCase()};
+                border: 0.50px black solid;
+            `;
+            colorGroup.appendChild(swatch);
+
+            // Color Label
+            const label = document.createElement('div');
+            label.textContent = color;
+            label.style.cssText = `
+                width: 112px;
+                left: ${index === 0 ? '15px' : '149px'};
+                top: 35px;
+                position: absolute;
+                color: black;
+                font-size: 18px;
+                font-family: Jost;
+                font-weight: 400;
+                text-transform: capitalize;
+                line-height: 18px;
+            `;
+            colorGroup.appendChild(label);
+        });
+
+        // ====== Dynamic Size Section ======
+        const sizesContainer = document.getElementById('popup-sizes-container');
+        sizesContainer.innerHTML = `
+            <div data-property-1="Group 1000008185" style="width: 271px; height: 64px; position: absolute">
+                <div style="width: 271px; height: 40.44px; left: 0px; top: 24.35px; position: absolute; border: 0.50px black solid"></div>
+                <div style="width: 39.73px; height: 0px; left: 216px; top: 24.54px; position: absolute; transform: rotate(90deg); outline: 0.50px black solid;"></div>
+                <div style="left: 0px; top: 0px; position: absolute; color: #333333; font-size: 14px; font-family: Jost; font-weight: 400; line-height: 18.20px;">Size</div>
+                <div style="width: 12px; height: 6px; left: 238px; top: 42px; position: absolute; outline: 1.50px black solid;"></div>
+            </div>
+        `;
+
+        const sizeGroup = sizesContainer.firstElementChild;
+        const sizes = product.options.find(opt => opt.name.toLowerCase() === 'size')?.values || [];
+
+        sizes.forEach((size, index) => {
+            const sizeLabel = document.createElement('div');
+            sizeLabel.textContent = size;
+            sizeLabel.style.cssText = `
+                width: 185px;
+                height: 20px;
+                left: 13px;
+                top: 35px;
+                position: absolute;
+                color: black;
+                font-size: 16px;
+                font-family: Jost;
+                font-weight: 400;
+                line-height: 16px;
+            `;
+            sizeGroup.appendChild(sizeLabel);
+        });
+
+        document.getElementById('product-popup').style.display = 'block';
+    } catch (error) {
+        console.error("Error loading product details", error);
+    }
+}
+
+function closePopup() {
+    document.getElementById('product-popup').style.display = 'none';
+}
+
+</script>
