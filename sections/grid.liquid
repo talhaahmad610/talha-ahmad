@@ -253,7 +253,7 @@
 </div>
 
     <!-- Add to Cart Button -->
-    <div id="add-cart">
+    <div id="add-cart" data-add-to-cart>
         <div id="add-cart-btn">
             Add to cart
         </div>
@@ -265,12 +265,16 @@
 
 </div>
 <script>
+let selectedProduct = null;
+let selectedColor = '';
+let selectedSize = '';
 async function openPopup(handle) {
     try {
         const response = await fetch(`/products/${handle}.json`);
         if (!response.ok) throw new Error("Failed to fetch product");
         const data = await response.json();
         const product = data.product;
+        selectedProduct = data.product;
 
         // Update basic info
         document.getElementById('popup-title').textContent = product.title;
@@ -320,6 +324,9 @@ async function openPopup(handle) {
                 line-height: 18px;
             `;
             colorGroup.appendChild(label);
+            swatch.addEventListener('click', () => {
+                selectedColor = color.toLowerCase();
+            });
         });
 
         // ====== Dynamic Size Section ======
@@ -352,6 +359,9 @@ sizes.forEach(size => {
     sizeOptionsContainer.style.display = 'none';
   });
   sizeOptionsContainer.appendChild(sizeOption);
+  sizeOption.addEventListener('click', () => {
+                selectedSize = size.toLowerCase();
+            });
 });
 
 // Dropdown toggle logic
@@ -365,11 +375,75 @@ document.addEventListener('click', (e) => {
     sizeOptionsContainer.style.display = 'none';
   }
 });
+
         document.getElementById('product-popup').style.display = 'block';
     } catch (error) {
         console.error("Error loading product details", error);
     }
 }
+async function addToCart() {
+  if (!selectedProduct || !selectedSize) {
+    alert('Please select a size');
+    return;
+  }
+
+  try {
+    // Find the selected variant
+    const variant = selectedProduct.variants.find(v => 
+      v.options.includes(selectedColor) && 
+      v.options.includes(selectedSize)
+    );
+
+    if (!variant) {
+      alert('Selected combination not available');
+      return;
+    }
+
+    // Add main product to cart
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        items: [{
+          id: variant.id,
+          quantity: 1
+        }]
+      })
+    });
+
+    // Check if we need to add the Soft Winter Jacket
+    if (selectedColor.toLowerCase() === 'black' && selectedSize.toLowerCase() === 'medium') {
+      const jacketResponse = await fetch('/products/soft-winter-jacket.json');
+      const jacketData = await jacketResponse.json();
+      const jacketVariant = jacketData.product.variants[0];
+
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [{
+            id: jacketVariant.id,
+            quantity: 1
+          }]
+        })
+      });
+    }
+
+    // Redirect to cart or update UI
+    window.location.href = '/cart';
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    alert('Error adding product to cart');
+  }
+}
+
+// Add click handler to your Add to Cart button
+document.querySelector('[data-add-to-cart]').addEventListener('click', addToCart);
+
 
 function closePopup() {
     document.getElementById('product-popup').style.display = 'none';
