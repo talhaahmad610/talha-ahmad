@@ -57,62 +57,149 @@
 
 
   /* Popup Card */
-  .popup-container {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
+  #product-popup{
+    display: none; 
+    width: 311px; 
+    height: 447px; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: white; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); 
+    z-index: 1000; 
+    padding: 20px; 
+    border-radius: 8px;
+  }
+  
+  #popup-product-image{
+    width: 120px; 
+    height: 140px; 
+    left: 17px; 
+    top: 36px; 
+    position: absolute; 
+    object-fit: cover;
+  }
+  #popup-title{
+    width: 136px; 
+    left: 145px; 
+    top: 39px; 
+    position: absolute; 
+    color: black; 
+    font-size: 16px; 
+    font-family: Jost; 
+    font-weight: 300; 
+    line-height: 19.20px;
+  }
 
-.popup-card {
-    width: 311px;
-    height: 447px;
-    background: white;
-    position: relative;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-}
+  #popup-price{
+    width: 64px; 
+    left: 145px; 
+    top: 60px; 
+    position: absolute; 
+    color: black; 
+    font-size: 16px; 
+    font-family: Lustria; 
+    font-weight: 400; 
+    line-height: 19.20px;
+  }
 
-.popup-image {
-    width: 120px;
-    height: 140px;
-}
+  #popup-description{
+    width: 146px; 
+    left: 145px; 
+    top: 80px; 
+    position: absolute; 
+    color: black; 
+    font-size: 14px; 
+    font-family: Jost; 
+    font-weight: 300; 
+    line-height: 15.40px;
+  }
 
-.popup-title, .popup-price, .popup-description {
-    font-family: Jost, sans-serif;
-}
-
-.popup-options {
-    margin-top: 10px;
-}
-
-.popup-colors, .popup-size {
-    display: flex;
-    gap: 10px;
-}
-
-.popup-add-to-cart {
-    background: black;
-    color: white;
-    padding: 10px;
-    text-transform: uppercase;
-    cursor: pointer;
-    width: 100%;
-    border: none;
-}
-
-.popup-close {
+  #popup-colors-container{
+    width: 271px; 
+    height: 64.48px; 
+    left: 20px; 
+    top: 186px; 
     position: absolute;
-    top: 10px;
-    right: 10px;
+  }
+
+  #popup-sizes-container{
+    width: 271px; 
+    height: 64px; 
+    left: 20px; 
+    top: 262px; 
+    position: absolute;
+  }
+
+  #size-dropdown-trigger{
+    width: 271px; 
+    height: 40.44px; 
+    left: 0px; 
+    top: 24.35px; 
+    position: absolute; 
+    border: 0.50px black solid; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    padding-left: 13px;
+  }
+
+  #selected-size{
+    color: black; 
+    font-size: 16px; 
+    font-family: Jost; 
+    font-weight: 400; 
+    line-height: 16px;
+  }
+
+  #size-options{
+    display: none; 
+    position: absolute; 
+    top: 64px; 
+    left: 0; 
+    width: 271px; 
+    background: white; 
+    border: 0.50px black solid; 
+    z-index: 10;
+  }
+
+  #add-cart{
+    width: 271px; 
+    height: 45px; 
+    left: 20px; 
+    top: 377px; 
+    position: absolute; 
+    background: black; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+  }
+
+  #add-cart-btn{
+    color: white; 
+    font-size: 16px; 
+    font-family: Jost; 
+    font-weight: 400; 
+    text-transform: uppercase; 
+    line-height: 20.48px;
+  }
+
+  #close-btn{
+    position: absolute; 
+    top: 22.60px; 
+    right: 20px; 
+    width: 20px; 
+    height: 20px; 
     cursor: pointer;
-    font-size: 18px;
-}
+    color: black;
+    font-size: 24px;
+    font-family: Jost;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+  }
+
 </style>
 
 
@@ -129,51 +216,52 @@
   {% endfor %}
 </div>
 <!-- Popup Card -->
-<div id="product-popup" style="display: none; width: 311px; height: 447px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); z-index: 1000; padding: 20px; border-radius: 8px;">
+<div id="product-popup">
     
     <!-- Product Image -->
-    <img id="popup-product-image" style="width: 120px; height: 140px; left: 17px; top: 36px; position: absolute; object-fit: cover;">
+    <img id="popup-product-image">
 
     <!-- Product Title -->
-    <div id="popup-title" style="width: 136px; left: 145px; top: 39px; position: absolute; color: black; font-size: 16px; font-family: Jost; font-weight: 300; line-height: 19.20px;"></div>
+    <div id="popup-title" ></div>
 
     <!-- Product Price -->
-    <div id="popup-price" style="width: 64px; left: 145px; top: 60px; position: absolute; color: black; font-size: 16px; font-family: Lustria; font-weight: 400; line-height: 19.20px;"></div>
+    <div id="popup-price" ></div>
 
     <!-- Product Description -->
-    <div id="popup-description" style="width: 146px; left: 145px; top: 80px; position: absolute; color: black; font-size: 14px; font-family: Jost; font-weight: 300; line-height: 15.40px;"></div>
+    <div id="popup-description" ></div>
 
     <!-- Colors Section Container -->
-    <div id="popup-colors-container" style="width: 271px; height: 64.48px; left: 20px; top: 186px; position: absolute;"></div>
+    <div id="popup-colors-container" ></div>
 
     <!-- Sizes Section Container -->
-    <div id="popup-sizes-container" style="width: 271px; height: 64px; left: 20px; top: 262px; position: absolute;"></div>
+    <div id="popup-sizes-container">
+  <div data-property-1="Group 1000008185" style="width: 271px; height: 64px; position: relative;">
+    <!-- Size label -->
+    <div style="left: 0px; top: 0px; position: absolute; color: #333333; font-size: 14px; font-family: Jost; font-weight: 400; line-height: 18.20px;">Size</div>
+    
+    <!-- Dropdown trigger -->
+    <div id="size-dropdown-trigger">
+      <span id="selected-size">Choose your size</span>
+      <!-- Dropdown arrow -->
+      <div style="width: 12px; height: 6px; left: 238px; top: 42px; position: absolute; outline: 1.50px black solid; transform: rotate(180deg);"></div>
+    </div>
+
+    <!-- Dropdown options -->
+    <div id="size-options">
+    </div>
+  </div>
+</div>
 
     <!-- Add to Cart Button -->
-    <div style="width: 271px; height: 45px; left: 20px; top: 377px; position: absolute; background: black; display: flex; align-items: center; justify-content: center;">
-        <div style="color: white; font-size: 16px; font-family: Jost; font-weight: 400; text-transform: uppercase; line-height: 20.48px;">
+    <div id="add-cart">
+        <div id="add-cart-btn">
             Add to cart
         </div>
     </div>
 
     <!-- Close Button -->
-<div 
-  onclick="closePopup()" 
-  style="
-    position: absolute; 
-    top: 22.60px; 
-    right: 20px; 
-    width: 20px; 
-    height: 20px; 
-    cursor: pointer;
-    color: black;
-    font-size: 24px;
-    font-family: Jost;
-    font-weight: 400;
-    line-height: 20px;
-    text-align: center;
-  "
->×</div>
+<div id="close-btn"
+  onclick="closePopup()" >×</div>
 
 </div>
 <script>
@@ -236,36 +324,47 @@ async function openPopup(handle) {
 
         // ====== Dynamic Size Section ======
         const sizesContainer = document.getElementById('popup-sizes-container');
-        sizesContainer.innerHTML = `
-            <div data-property-1="Group 1000008185" style="width: 271px; height: 64px; position: absolute">
-                <div style="width: 271px; height: 40.44px; left: 0px; top: 24.35px; position: absolute; border: 0.50px black solid"></div>
-                <div style="width: 39.73px; height: 0px; left: 216px; top: 24.54px; position: absolute; transform: rotate(90deg); outline: 0.50px black solid;"></div>
-                <div style="left: 0px; top: 0px; position: absolute; color: #333333; font-size: 14px; font-family: Jost; font-weight: 400; line-height: 18.20px;">Size</div>
-                <div style="width: 12px; height: 6px; left: 238px; top: 42px; position: absolute; outline: 1.50px black solid;"></div>
-            </div>
-        `;
+const sizeOptionsContainer = document.getElementById('size-options');
+const selectedSizeElement = document.getElementById('selected-size');
 
-        const sizeGroup = sizesContainer.firstElementChild;
-        const sizes = product.options.find(opt => opt.name.toLowerCase() === 'size')?.values || [];
+// Clear previous options
+sizeOptionsContainer.innerHTML = '';
 
-        sizes.forEach((size, index) => {
-            const sizeLabel = document.createElement('div');
-            sizeLabel.textContent = size;
-            sizeLabel.style.cssText = `
-                width: 185px;
-                height: 20px;
-                left: 13px;
-                top: 35px;
-                position: absolute;
-                color: black;
-                font-size: 16px;
-                font-family: Jost;
-                font-weight: 400;
-                line-height: 16px;
-            `;
-            sizeGroup.appendChild(sizeLabel);
-        });
+// Get sizes from product
+const sizes = product.options.find(opt => opt.name.toLowerCase() === 'size')?.values || [];
 
+// Create dropdown options
+sizes.forEach(size => {
+  const sizeOption = document.createElement('div');
+  sizeOption.textContent = size;
+  sizeOption.style.cssText = `
+    padding: 10px 13px;
+    color: black;
+    font-size: 16px;
+    font-family: Jost;
+    font-weight: 400;
+    line-height: 16px;
+    cursor: pointer;
+    &:hover { background: #f5f5f5; }
+  `;
+  sizeOption.addEventListener('click', () => {
+    selectedSizeElement.textContent = size;
+    sizeOptionsContainer.style.display = 'none';
+  });
+  sizeOptionsContainer.appendChild(sizeOption);
+});
+
+// Dropdown toggle logic
+document.getElementById('size-dropdown-trigger').addEventListener('click', () => {
+  sizeOptionsContainer.style.display = sizeOptionsContainer.style.display === 'none' ? 'block' : 'none';
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#popup-sizes-container')) {
+    sizeOptionsContainer.style.display = 'none';
+  }
+});
         document.getElementById('product-popup').style.display = 'block';
     } catch (error) {
         console.error("Error loading product details", error);
